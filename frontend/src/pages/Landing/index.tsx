@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { ScanText, BrainCircuit, FileQuestion, Sparkles, ArrowRight } from 'lucide-react';
 import * as E from './style';
 
 const Landing = () => {
+    const navigate = useNavigate();
     return (
         <E.PageContainer>
             {/* Background Elements */}
@@ -23,7 +25,7 @@ const Landing = () => {
                     <E.NavLink href="#how-it-works">How it Works</E.NavLink>
                     <E.NavLink href="#pricing">Pricing</E.NavLink>
                 </E.NavLinks>
-                <E.Button>Get Started</E.Button>
+                <E.Button onClick={() => navigate('/generator')}>Get Started</E.Button>
             </E.Nav>
 
             {/* Hero Section */}
@@ -42,7 +44,7 @@ const Landing = () => {
                         Upload any English text or problem sheet. We analyze the grammar, structure, and context to generate TOEIC-style questions and personalized study materials instantly.
                     </E.Subtitle>
                     <E.ButtonGroup>
-                        <E.Button>
+                        <E.Button onClick={() => navigate('/generator')}>
                             Try Demo <ArrowRight size={20} />
                         </E.Button>
                         <E.Button variant="outline">

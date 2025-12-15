@@ -36,7 +36,7 @@ Distractor 패턴(오답 선택지 유형)
 Part 6 문장 삽입 규칙
 
 Part 7 문제 패러프레이징 규칙
-→ 모아서 벡터DB(Chroma / Pinecone / Vertex AI Vector DB)에 저장
+→ 모아서 벡터DB(ChromaDB)에 저장
 
 문제 생성 (LLM + 선택적 RAG)
 
@@ -54,7 +54,7 @@ RAG 결과를 참고해 ETS 스타일로 조정
 
 🟦 RAG 사용 목적
 
-RAG는 “정답을 위해” 사용되는 것이 아니라
+RAG는 "정답을 위해" 사용되는 것이 아니라
 토익 공식 스타일을 재현하는 규칙을 반영하기 위해 사용됩니다.
 
 문제 오답 선택지 패턴
@@ -79,11 +79,11 @@ RAG에서 가져온 ETS 규칙을 반영하여 더 토익스러운 문제를 생
 기본 문제 생성
 → LLM 자체 능력으로 충분
 
-🟦 시스템 아키텍처 (2025-12-01 추가)
+🟦 시스템 아키텍처 (2025-12-08 업데이트)
 
 Frontend
-- React (Vite)
-- TailwindCSS (via index.css variables & classes)
+- React (Vite) + TypeScript
+- Emotion (CSS-in-JS)
 - Framer Motion (Animations)
 - Lucide React (Icons)
 - "Dreamy" Design System (Deep Purple/Blue gradients, Glassmorphism)
@@ -91,8 +91,39 @@ Frontend
 Backend
 - FastAPI (Python)
 - REST API 구조
-- OCR 및 LLM 연동 예정
+- OCR: Google Vision API 연동
+- LLM: OpenAI/Gemini API 연동
+- RAG: ChromaDB (Vector DB)
 
 Directory Structure
 - /backend: FastAPI 서버
+  - /app/routers: API 엔드포인트 (ocr, analysis, generate)
+  - /app/services: 비즈니스 로직 (ocr_service, llm_service, rag_service, problem_generator)
+  - /app/schemas: Pydantic 모델
+  - /app/config.py: 환경 변수 관리
 - /frontend: React 클라이언트
+  - /src/pages/Landing: 랜딩 페이지
+  - /src/pages/Generator: 문제 생성 페이지
+
+🟦 실행 방법
+
+Backend:
+```bash
+cd backend
+pip install -r requirements.txt
+cp .env.example .env  # API 키 설정
+uvicorn app.main:app --reload
+```
+
+Frontend:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+🟦 API 엔드포인트
+
+- POST /api/ocr/upload: 이미지 업로드 → 텍스트 추출
+- POST /api/analysis/analyze: 텍스트 분석 (품사, 문법, 파트 판별)
+- POST /api/generate/problem: TOEIC 문제 생성
